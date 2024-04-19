@@ -1,27 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { updateRole } from '../actions/roleActions';
-const Medium = () => {
+const MediumBoard = () => {
 
 
     const [board, setBoard] = useState(Array(16).fill('')); // Empty board state
-    const [currentPlayer, setCurrentPlayer] = useState('O'); // Current player starts as X
+    const [currentPlayer, setCurrentPlayer] = useState('X'); // Current player starts as X
     const [winner, setWinner] = useState(null); // No winner initially
     const dispatch = useDispatch();
     const [count, setCount] = useState(0)
-
-
-    useEffect(() => {
-        if (count == 0) {
-
-            const CBoard = [...board]; // Create a copy of the board
-            CBoard[6] = "X";
-            setBoard(CBoard);
-            const num = count + 1;
-            setCount(num);
-        }
-
-    }, [count]);
 
     const handleCellClick = (index) => {
         if (board[index] === '' && !winner) {
@@ -56,50 +43,14 @@ const Medium = () => {
                 }
             }
 
-            // Computer's turn after player's move
-            makeComputerMove(newBoard);
+            // Switch current player after each valid move
+            setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
         }
-        if (count == 15) {
+        if(count == 15){
             dispatch(updateRole("TIE")); // Dispatch the updateMessage action
         }
     };
 
-    const makeComputerMove = (newBoard) => {
-        // const bestMove = minimax(newBoard);
-        const num = count + 1;
-        setCount(num);
-        const emptyCells = [];
-        for (let i = 0; i < newBoard.length; i++) {
-            if (newBoard[i] == "") {
-                emptyCells.push(i);
-            }
-        }
-
-        console.log(emptyCells)
-
-        let bestMove = getRandomIndex(emptyCells);
-
-        function getRandomIndex(array) {
-            // Check if the array is empty
-            if (!array || array.length === 0) {
-                return null; // Return null for empty array
-            }
-
-            // Get the array length
-            const arrayLength = array.length;
-
-            // Generate a random number between 0 (inclusive) and arrayLength (exclusive)
-            const randomIndex = Math.floor(Math.random() * arrayLength);
-
-            return array[randomIndex];
-        }
-
-        console.log(bestMove)
-        const newCBoard = [...newBoard]; // Create a copy of the board
-        newCBoard[bestMove] = 'X';
-        setBoard(newCBoard);
-        setCurrentPlayer('O'); // Switch back to player after computer's move
-    };
 
     return (
         <div className='w-full md:w-2/4 h-4/4 flex items-center justify-center'>
@@ -130,4 +81,4 @@ const Medium = () => {
     )
 }
 
-export default Medium
+export default MediumBoard

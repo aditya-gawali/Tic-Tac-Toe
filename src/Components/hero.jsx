@@ -4,10 +4,11 @@ import Easy from './Easy';
 import Medium from './Medium';
 import Hard from './Hard';
 
-
 import { useSelector, useDispatch } from 'react-redux';
 import { updateRole } from '../actions/roleActions';
-import { Link } from 'react-router-dom';
+import EasyBoard from './EasyBoard';
+import MediumBoard from './MediumBoard';
+import HardBoard from './HardBoard';
 
 
 const hero = () => {
@@ -66,6 +67,18 @@ const hero = () => {
                         <button onClick={WinnerHandler} className='bg-indigo-700 p-4 rounded-md font-semibold text-2xl'>Play Again</button>
                     </div>
 
+                </div> : winner && winner == "TIE" ? <div className='absolute w-full h-full flex flex-col md:flex-row bg-gray-300 bg-opacity-70 items-center justify-center text-white'>
+
+                    <div className='w-2/4 h-2/4 bg-indigo-600 rounded-md flex items-center justify-center flex-col gap-8'>
+                        <div className='flex flex-row gap-8 text-2xl bg-indigo-500 px-6 py-4 rounded-md'>
+                            <h1 className='text-center'>{!p1 ? "Computer" : p1} <br /> 0</h1>
+                            <h1>VS</h1>
+                            <h1 className='text-center'>{p2} <br /> 0</h1>
+                        </div>
+                        <h1 className='text-4xl '>Tie Match!</h1>
+                        <button onClick={WinnerHandler} className='bg-indigo-700 p-4 rounded-md font-semibold text-2xl'>Play Again</button>
+                    </div>
+
                 </div> : <></>
             }
 
@@ -74,7 +87,7 @@ const hero = () => {
 
 
                 {start ?
-                    level == "easy" ? <Easy /> : level == "medium" ? <Medium /> : <Hard /> :
+                    level == "easy" ? mode == "computer" ? <Easy/> : <EasyBoard /> : level == "medium" ? mode == "computer" ? <Medium/> : <MediumBoard /> : mode == "computer" ? <Hard/> : <HardBoard /> :
                     <>
                         <div className='w-full md:w-2/4 h-4/4 flex items-center justify-center'>
                             <video src={heroVideo} autoPlay loop muted className=''></video>
@@ -113,17 +126,17 @@ const hero = () => {
                                 </> :
                                     mode && level == "" ?
                                         <>
-                                            <h1 className='text-center text-3xl'>SELECT LEVEL</h1>
+                                            <h1 className='text-center text-3xl'>{mode == "computer" ? "SELECT LEVEL" : "SELECT BOARD"}</h1>
                                             <div className='flex flex-col md:flex-row gap-4 w-full text-xl'>
                                                 <button className='w-full bg-indigo-600 text-white p-4 rounded-lg' onClick={() => {
                                                     setLevel("easy")
-                                                }}>Easy</button>
+                                                }}>{mode == "computer" ? "Easy" : "3X3"}</button>
                                                 <button className='w-full bg-indigo-600 text-white p-4 rounded-lg' onClick={() => {
                                                     setLevel("medium")
-                                                }}>Medium</button>
+                                                }}>{mode == "computer" ? "Medium" : "4X4"}</button>
                                                 <button className='w-full bg-indigo-600 text-white p-4 rounded-lg' onClick={() => {
                                                     setLevel("hard")
-                                                }}>Hard</button>
+                                                }}>{mode == "computer" ? "Hard" : "5X5"}</button>
                                             </div>
                                         </> :
                                         level && mode == "computer" ? <>
